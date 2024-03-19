@@ -1,0 +1,76 @@
+﻿@model InvoiceManager.Models.ViewModels.EditInvoicePositionViewModel
+
+@{
+    ViewBag.Title = Model.Heading;
+}
+
+<h1>@Model.Heading</h1>
+
+@using (Html.BeginForm("InvoicePosition", "Home"))
+{
+    @Html.AntiForgeryToken()
+
+    if (Model.InvoicePosition.Id == 0)
+    {
+        <p class="alert alert-info mt-2 mb-2">
+            Pola takie jak Lp, Produkt oraz Ilość są
+            <strong>wymagane</strong>
+        </p>
+    }
+
+        @Html.HiddenFor(x => x.InvoicePosition.Id)
+        @Html.HiddenFor(x => x.InvoicePosition.InvoiceId)
+
+        <div class="form-group row m-1">
+            @Html.LabelFor(x => x.InvoicePosition.Lp)
+            @Html.TextBoxFor(x => x.InvoicePosition.Lp,
+                new { @class = "form-control mt-2", autofocus = "autofocus" })
+            @Html.ValidationMessageFor(x => x.InvoicePosition.Lp)
+        </div>
+
+        <div class="form-group row m-1">
+            @Html.LabelFor(x => x.InvoicePosition.ProductId)
+            @Html.DropDownListFor(x => x.InvoicePosition.ProductId,
+                new SelectList(Model.Products, "Id", "Name"), 
+                "--Wybierz produkt--",
+                new { @class = "form-control mt-2" })
+            @Html.ValidationMessageFor(x => x.InvoicePosition.ProductId)
+        </div>
+
+        <div class="form-group row m-1">
+            @Html.LabelFor(x => x.InvoicePosition.Quantity)
+            @Html.TextBoxFor(x => x.InvoicePosition.Quantity,
+                new { @class = "form-control mt-2" })
+            @Html.ValidationMessageFor(x => x.InvoicePosition.Quantity)
+        </div>
+
+        if (Model.InvoicePosition.Id != 0)
+        {
+            <div class="form-group row m-1">
+                @Html.LabelFor(x => x.InvoicePosition.Value)
+                @Html.TextBoxFor(x => x.InvoicePosition.Value,
+                      new { @class = "form-control mt-2", @readonly = "readonly" })
+            </div>
+        }
+
+        <button class="btn btn-primary btn-lg mt-2 " type="submit">
+            Zapisz
+        </button>
+    
+}
+
+
+@section Scripts
+{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $.validator.methods.number = function (value, element) {
+                return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+            }
+        });
+
+    </script>
+}

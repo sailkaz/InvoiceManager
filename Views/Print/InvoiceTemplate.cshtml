@@ -1,0 +1,122 @@
+﻿@model InvoiceManager.Models.Domains.Invoice
+
+
+@{
+    ViewBag.Title = "Faktura";
+}
+
+<link href="@Url.Content("~/Content/PrintInvoice.css")" rel="stylesheet" type="text/css" />
+
+
+<body>
+    <div class="invoice-font">
+
+        <div class="row">
+            <div class="col-12 header-font">
+                <div>Faktura</div>
+                <div>@Model.Title</div>
+            </div>
+        </div>-
+
+        <div class="row mt-5">
+            <div class="col-5">
+                <img src="@Url.Content("~/Content/Images/logo.jpg")" alt="logo" class="logo" />
+            </div>
+            <div class="col-4 offset-3">
+                <div class="top-line">
+                    <div class="top-small-caption">
+                        Data Sprzedaży
+                    </div>
+                    <div>
+                        @Model.CreateDate.ToString("dd-MM-yyyy")
+                    </div>
+                </div>
+                <div class="top-line">
+                    <div class="top-small-caption">
+                        Termin Zapłaty
+                    </div>
+                    <div>
+                        @Model.PaymentDate.ToString("ddd-MM-yyyy")
+                    </div>
+                </div>
+                <div class="top-line">
+                    <div class="top-small-caption">
+                        Forma Płatności
+                    </div>
+                    <div>
+                        @Model.PaymentMethod.Name
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-50">
+            <div class="col-5">
+                <div class="top-line">
+                    <div class="top-small-caption">
+                        Sprzedawca:
+                    </div>
+                    <div>@Model.User.Name</div>
+                    <div>Ul. @Model.User.Address.Street @Model.User.Address.StreetNumber</div>
+                    <div>@Model.User.Address.PostalCode @Model.User.Address.City</div>
+                    <div>Email: @Model.User.Email</div>
+
+                </div>
+            </div>
+            <div class="col-5 offset-2">
+                <div class="top-line">
+                    <div class="top-small-caption">
+                        Nabywca:
+                    </div>
+                    <div>@Model.Client.Name</div>
+                    <div>Ul. @Model.Client.Address.Street @Model.Client.Address.StreetNumber</div>
+                    <div>@Model.Client.Address.PostalCode @Model.Client.Address.City</div>
+                    <div>Email: @Model.Client.Email</div>
+                </div>
+            </div>
+        </div>
+        <table class="table table-bordered mt-5">
+            <thead>
+                <tr>
+                    <th>lp.</th>
+                    <th>Produkt</th>
+                    <th>Ilość</th>
+                    <th>Wartość</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var position in Model.InvoicePositions)
+                {
+                    <tr>
+                        <td>@position.Lp</td>
+                        <td>@position.Product.Name</td>
+                        <td>@position.Quantity</td>
+                        <td>@position.Value</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-12">
+                <div class="text-end">Wartość: <strong>@Model.Value zł</strong></div>
+                @if (!string.IsNullOrEmpty(@Model.Comments))
+                {
+                    <div class="text-start">Uwagi: @Model.Comments</div>
+                }
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div>Wystawił:</div>
+                <div>@Model.User.Name</div>
+                <div class="mt-5">................</div>
+            </div>
+            <div class="col-6">
+                <div>Odebrał:</div>
+                <div>@Model.Client.Name</div>
+                <div class="mt-5">................</div>
+            </div>
+        </div>
+    </div>
+</body>
+

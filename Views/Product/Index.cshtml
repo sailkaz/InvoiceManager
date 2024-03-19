@@ -1,0 +1,89 @@
+﻿@model IEnumerable<InvoiceManager.Models.Domains.Product>
+@{
+    ViewBag.Title = "Produkty";
+}
+
+<h2 class="mb-3">@ViewBag.Title</h2>
+
+
+<button class="btn btn-primary"
+        onclick='window.location.href="@Url.Action("AddEditProduct", "Product")"'>
+    Dodaj
+</button>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-hover table-striped mt-3 mb-5">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Cena</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>
+                        <a class="font-weight-bold"
+                           href="@Url.Action("AddEditProduct", "Product", new {productId = product.Id})">
+                            @product.Id
+                        </a>
+                    </td>
+                    <td>@product.Name</td>
+                    <td>@product.Price</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm"
+                                onclick="deleteProduct('@product.Id  ', this)">
+                            Usuń
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <div class="mt-3">
+        Brak produktów do wyświetlenia
+    </div>
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        function deleteProduct(productId, btn) {
+
+            if (!confirm("Czy napewno chcesz usunąć ten produkt?"))
+                return;
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("DeleteProduct", "Product")",
+                data: {
+                    productId: productId,
+                },
+                success: function (data) {
+                    if (data.Success) {
+                        var row = btn.parentNode.parentNode;
+                        row.parentNode.removeChild(row)
+                    }
+                    else {
+                        alert(data.Message);
+                    }
+                },
+                error: function (data) {
+                    alert(data.Message);
+                },
+                dataType: 'json'
+            });
+        }
+
+
+    </script>
+}

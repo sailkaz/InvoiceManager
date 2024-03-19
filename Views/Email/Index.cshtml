@@ -1,0 +1,59 @@
+﻿@model InvoiceManager.Models.Domains.Email
+@{
+    ViewBag.Title = "Wysyłanie Faktury";
+}
+
+
+<div class="card shadow border-0">
+    <div class="card-header bg-secondary bg-gradient">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2>Wysyłanie Faktur</h2>
+            </div>
+
+        </div>
+    </div>
+
+    @using (Html.BeginForm("SendInvoice", "Email", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="card-body p-2">
+            <div class="col-12">
+                @Html.LabelFor(x => x.From)
+                @Html.TextBoxFor(x => x.From,
+                    new { @class = "form-control mt-2", autofocus = "autofocus", @readonly = "readonly" })
+            </div>
+            <div class="col-12">
+                @Html.LabelFor(x => x.To)
+                @Html.TextBoxFor(x => x.To,
+                    new { @class = "form-control mt-2", autofocus = "autofocus", @readonly = "readonly" })
+            </div>
+            <div class="col-12">
+                @Html.LabelFor(x => x.Subject)
+                @Html.TextBoxFor(x => x.Subject,
+                    new { @class = "form-control mt-2", autofocus = "autofocus", @readonly = "readonly" })
+            </div>
+            <div class="col-12">
+
+                @Html.LabelFor(x => x.Body)
+                @Html.TextAreaFor(x => x.Body, new { @class="form-control", @readonly = "readonly",
+               rows = "5", cols = "20"})
+            </div>
+            <div class="col-12">
+                <label>
+                    Załącz:
+                </label>
+                <input type="file" name="PostedFile" asp-for='AttachmentUrl' class="form-control mt-2" autofocus="autofocus" />
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <button type="submit" class="btn btn-primary btn-lg mt-2">Wyślij</button>
+                </div>
+                <div class="col-6">
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
