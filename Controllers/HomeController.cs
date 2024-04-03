@@ -65,19 +65,19 @@ namespace InvoiceManager.Controllers
                 GetNewInvoicePosition(invoiceId, invoicePositionId) :
                 _invoiceRepository.GetInvoicePosition(invoicePositionId, userId);
 
-            var invoicePositionViewModel = PreaperInvoicePositionViewModel(invoicePosition);
+            var invoicePositionViewModel = PreaperInvoicePositionViewModel(invoicePosition, userId);
 
             return View(invoicePositionViewModel);
         }
 
         private EditInvoicePositionViewModel PreaperInvoicePositionViewModel
-            (InvoicePosition invoicePosition)
+            (InvoicePosition invoicePosition, string userId)
         {
             return new EditInvoicePositionViewModel
             {
                 InvoicePosition = invoicePosition,
                 Heading = invoicePosition.Id == 0 ? "Dodawanie nowej pozycji" : " Edycja Pozycji",
-                Products = _productRepository.GetProducts()
+                Products = _productRepository.GetProducts(userId)
             };
         }
 
@@ -122,7 +122,7 @@ namespace InvoiceManager.Controllers
 
             if (!ModelState.IsValid)
             {
-                var vm = PreaperInvoicePositionViewModel(invoicePosition);
+                var vm = PreaperInvoicePositionViewModel(invoicePosition, userId);
                 return View("InvoicePosition", vm);
             }
             var product = _productRepository.GetProduct(invoicePosition.ProductId);

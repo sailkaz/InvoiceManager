@@ -26,7 +26,6 @@ namespace InvoiceManager.Models.Domains
         [DisplayName("Cena produktu")]
         public decimal Price { get; set; }
 
-        [Required]
         [ForeignKey("User")]
         public string UserId { get; set; }
 

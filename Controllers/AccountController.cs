@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using InvoiceManager.Models;
 using InvoiceManager.Models.Domains;
+using InvoiceManager.Models.Repositories;
 
 namespace InvoiceManager.Controllers
 {
@@ -18,6 +19,7 @@ namespace InvoiceManager.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly ProductRepository _productRepository = new ProductRepository();
 
         public AccountController()
         {
@@ -185,6 +187,14 @@ namespace InvoiceManager.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    var commonProduct = new Product
+                    {
+                        Name = "Wspólny",
+                        UserId = user.Id
+                    };
+
+                    _productRepository.Add(commonProduct);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link

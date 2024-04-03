@@ -8,11 +8,11 @@ namespace InvoiceManager.Models.Repositories
 {
     public class ProductRepository
     {
-        public List<Product> GetProducts()
+        public List<Product> GetProducts(string userId)
         {
             using (var context = new ApplicationDbContext()) 
             {
-                return context.Products.ToList();
+                return context.Products.Where(x => x.UserId == userId).ToList();
             }
         }
 
@@ -28,7 +28,8 @@ namespace InvoiceManager.Models.Repositories
         {
             using (var context = new ApplicationDbContext())
             {
-                return context.Products.Where(x => x.UserId == userId).Single(x => x.Id == productId);
+                var product = context.Products.Where(x => x.UserId == userId).Single(x => x.Id == productId);
+                return product;
             }
         }
 
